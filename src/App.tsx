@@ -1,25 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { List, Map } from './components';
+import styled from 'styled-components';
+import { MapEvent } from './constants/MapData';
 
-function App() {
+const Container = styled.div`
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+const App: React.FC = () => {
+  const [currentMarker, setCurrentMarker] = useState<MapEvent | null>(null);
+  const onListItemClicked = (e: MapEvent) => {
+    setCurrentMarker(e);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className="App">
+      <Map marker={currentMarker} />
+      <List onListItemClicked={onListItemClicked} />
+    </Container>
   );
 }
 
