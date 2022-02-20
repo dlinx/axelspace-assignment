@@ -1,10 +1,10 @@
-import React from "react";
-import { MdChildFriendly } from "react-icons/md";
+import React, { useState } from "react";
 import styled from 'styled-components';
-import { MapEvent, MAP_DATA } from "../constants/MapData";
+import { MapEvent } from "../constants/MapData";
 
 type Props = {
-  onListItemClicked: (listItem: MapEvent) => void
+  onListItemClicked: (listItem: MapEvent, index: number) => void
+  mapData: MapEvent[] 
 }
 const ListContainer = styled.ul`
   list-style: none;
@@ -14,6 +14,9 @@ const ListContainer = styled.ul`
   overflow: auto
 `;
 
+type ListItemProps = {
+  isSelected?: boolean
+}
 const ListItem = styled.li`
   border-bottom: 1px solid lightblue;
   padding: 20px 5px;
@@ -22,6 +25,15 @@ const ListItem = styled.li`
   :hover {
     background-color: lightgray;
   }
+
+  ${(props: ListItemProps) => {
+    if (props.isSelected) {
+      return `
+        background-color: lightgray;
+      `
+    }
+    return ``
+  }}
 `;
 
 const ListText = styled.span`
@@ -31,11 +43,18 @@ const ListText = styled.span`
 `;
 
 export const List: React.FC<Props> = (props) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const onListItemClicked = (mapEvent: MapEvent, i: number) => {
+    props.onListItemClicked(mapEvent, i);
+    setSelectedIndex(i);
+  }
   return <ListContainer>
-    {MAP_DATA.map((mapEvent, i) => <ListItem key={i}
-      onClick={() => props.onListItemClicked(mapEvent)}>
+    {props.mapData.map((mapEvent, i) => <ListItem key={i}
+      onClick={() => onListItemClicked(mapEvent, i)}
+      isSelected={selectedIndex === i}>
       {mapEvent.properties.icon}
-      <ListText>{mapEvent.properties.title} ({mapEvent.properties.year})</ListText>
+      <ListText >{mapEvent.properties.title} ({mapEvent.properties.year})</ListText>
     </ListItem>)}
   </ListContainer>
 }
