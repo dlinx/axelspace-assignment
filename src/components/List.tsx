@@ -94,32 +94,37 @@ export const List: React.FC<Props> = (props) => {
     }
   }
 
-  return <ListContainer>
+  return <ListContainer data-testid="list-container">
     <NavContainer>
       <NavigationButton
+        data-testid="btn-prev"
         onClick={() => onPreviousButtonClick()}
         disabled={selectedIndex === null || selectedIndex === 0}
       >Prev</NavigationButton>
       <SortOptions
         onChange={(e) => onSortChanged(e.target.value)}
         defaultValue="year"
+        data-testid="sort-selection"
       >
         <option value="year">Sort by Year</option>
         <option value="title">Sort Alphabetically</option>
       </SortOptions>
-      <button onClick={() => onSortDirectionChanged(sortDirection * -1)}>
+      <button
+        onClick={() => onSortDirectionChanged(sortDirection * -1)}
+        data-testid="btn-sort-dir">
         {sortDirection > 0 ? '↓' : '↑'}
       </button>
       <NavigationButton
         onClick={() => onNextButtonCLick()}
         disabled={selectedIndex === null || selectedIndex === mapData.length - 1}
+        data-testid="btn-next"
       >Next</NavigationButton>
     </NavContainer>
     {mapData.map((mapEvent, i) => <ListItem key={mapEvent.properties.title}
       onClick={() => onListItemClicked(mapEvent, i)}
       isSelected={selectedIndex === i}>
       {mapEvent.properties.icon}
-      <ListText >{mapEvent.properties.title} ({mapEvent.properties.year})</ListText>
+      <ListText>{mapEvent.properties.title} ({mapEvent.properties.year})</ListText>
     </ListItem>)}
   </ListContainer>
 }
